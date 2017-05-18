@@ -2,36 +2,47 @@ package com.company;
 
 import com.jcraft.jsch.*;
 
+import javax.swing.*;
 import java.io.*;
 import java.util.*;
 
 
 public class Main {
 
+
     public static void main(String[] args) throws IOException, SftpException, JSchException {
+        JFrame ventana = new JFrame("Analisis de Logs");
+        ventana.setContentPane(new Ventana().view);
+        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ventana.setResizable(false);
+        ventana.pack();
+        ventana.setVisible(true);
+
+    }
+
+    public static boolean conexionSFTP(String login, String maquina, String password, String ficheroOrigen, String ficheroDestino) throws JSchException, SftpException {
         JSch jsch = new JSch();
         Session session = null;
 
         try {
-            session = jsch.getSession("root", "192.168.242.153", 22);
+            session = jsch.getSession(login, maquina, 22);
             session.setConfig("StrictHostKeyChecking", "no");
-            session.setPassword("ctphOnE2015");
+            session.setPassword(password);
             session.connect();
         } catch (Exception e) {
-
+            System.out.println("Origen no encontrado");
+            return false;
         }
         Channel channel = session.openChannel("sftp");
         channel.connect();
         ChannelSftp sftpChannel = (ChannelSftp) channel;
-        sftpChannel.get("/root/logs/backend.log.18_05_2017", "backend.log.153");
+        sftpChannel.get(ficheroOrigen, ficheroDestino);
         sftpChannel.exit();
         session.disconnect();
-
-        analizarLog("backend.log.153");
-
+        return true;
     }
 
-    private static void analizarLog(String nombreFichero) throws IOException {
+    public static void analizarLog(String nombreFichero) throws IOException {
         String linea;
         String archivo = nombreFichero;
         String archivo_destino = "tiempos " + archivo;
@@ -118,12 +129,13 @@ public class Main {
         private String peticion;
         private double duracion;
 
-        public Tiempo(){
+        public Tiempo() {
 
         }
-        public Tiempo(String peticion, double duracion){
-            this.peticion=peticion;
-            this.duracion=duracion;
+
+        public Tiempo(String peticion, double duracion) {
+            this.peticion = peticion;
+            this.duracion = duracion;
         }
 
         public String getPeticion() {
@@ -141,9 +153,10 @@ public class Main {
         public void setDuracion(double duracion) {
             this.duracion = duracion;
         }
+
         @Override
-        public String toString(){
-            return this.getPeticion()+"-"+this.getDuracion();
+        public String toString() {
+            return this.getPeticion() + "-" + this.getDuracion();
         }
 
     }
