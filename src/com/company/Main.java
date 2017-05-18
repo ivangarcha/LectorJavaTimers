@@ -13,7 +13,7 @@ public class Main {
         Session session = null;
 
         try {
-            session = jsch.getSession("root", "192.168.242.150", 22);
+            session = jsch.getSession("root", "192.168.242.153", 22);
             session.setConfig("StrictHostKeyChecking", "no");
             session.setPassword("ctphOnE2015");
             session.connect();
@@ -23,11 +23,11 @@ public class Main {
         Channel channel = session.openChannel("sftp");
         channel.connect();
         ChannelSftp sftpChannel = (ChannelSftp) channel;
-        sftpChannel.get("/root/logs/backend.log.17_05_2017", "backend.log");
+        sftpChannel.get("/root/logs/backend.log.18_05_2017", "backend.log.153");
         sftpChannel.exit();
         session.disconnect();
 
-        analizarLog("backend.log");
+        analizarLog("backend.log.153");
 
     }
 
