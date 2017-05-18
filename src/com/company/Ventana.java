@@ -27,14 +27,15 @@ public class Ventana {
     private class Buscar implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (servidor.getText().isEmpty() || login.getText().isEmpty() || destino.getText().isEmpty() || password.getText().isEmpty()) {
+            if (servidor.getText().isEmpty() || login.getText().isEmpty() || destino.getText().isEmpty() || password.getPassword().length<1) {
                 JOptionPane.showMessageDialog(null, "Todos los campos son requeridos");
             } else {
                 try {
-                    if (Main.conexionSFTP(login.getText(), servidor.getText(), password.getText(), origen.getText(), destino.getText())) {
+                    String pass=new String(password.getPassword());
+                    if (Main.conexionSFTP(login.getText(), servidor.getText(), pass, origen.getText(), destino.getText())) {
                         Main.analizarLog(destino.getText());
                     }
-                    ;
+
                 } catch (JSchException e1) {
                     e1.printStackTrace();
                 } catch (SftpException e1) {
