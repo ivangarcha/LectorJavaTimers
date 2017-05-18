@@ -20,7 +20,7 @@ public class Main {
 
     }
 
-    public static boolean conexionSFTP(String login, String maquina, String password, String ficheroOrigen, String ficheroDestino) throws JSchException, SftpException {
+    public static boolean conexionSFTP(String login, String maquina, String password, String ficheroOrigen, String ficheroDestino) {
         JSch jsch = new JSch();
         Session session = null;
 
@@ -29,17 +29,18 @@ public class Main {
             session.setConfig("StrictHostKeyChecking", "no");
             session.setPassword(password);
             session.connect();
+
+            Channel channel = session.openChannel("sftp");
+            channel.connect();
+            ChannelSftp sftpChannel = (ChannelSftp) channel;
+            sftpChannel.get(ficheroOrigen, ficheroDestino);
+            sftpChannel.exit();
+            session.disconnect();
+            return true;
         } catch (Exception e) {
-            System.out.println("Origen no encontrado");
+            JOptionPane.showMessageDialog(null, "No se puede conectar");
             return false;
         }
-        Channel channel = session.openChannel("sftp");
-        channel.connect();
-        ChannelSftp sftpChannel = (ChannelSftp) channel;
-        sftpChannel.get(ficheroOrigen, ficheroDestino);
-        sftpChannel.exit();
-        session.disconnect();
-        return true;
     }
 
     public static void analizarLog(String nombreFichero) throws IOException {
@@ -108,6 +109,7 @@ public class Main {
                 }
                 bw.close();
                 b.close();
+
             } catch (NoSuchElementException e) {
 
             }

@@ -1,17 +1,15 @@
 package com.company;
 
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.SftpException;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Closeable;
 import java.io.IOException;
 
 /**
  * Created by igarcia on 18/05/2017.
  */
-public class Ventana {
+public class Ventana implements Closeable {
     private JTextField servidor;
     private JTextField login;
     public JPanel view;
@@ -24,22 +22,25 @@ public class Ventana {
         buscarButton.addActionListener(new Buscar());
     }
 
+    @Override
+    public void close() throws IOException {
+
+    }
+
     private class Buscar implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (servidor.getText().isEmpty() || login.getText().isEmpty() || destino.getText().isEmpty() || password.getPassword().length<1) {
+            if (servidor.getText().isEmpty() || login.getText().isEmpty() || destino.getText().isEmpty() || password.getPassword().length < 1) {
                 JOptionPane.showMessageDialog(null, "Todos los campos son requeridos");
             } else {
                 try {
-                    String pass=new String(password.getPassword());
+                    buscarButton.setEnabled(false);
+                    String pass = new String(password.getPassword());
                     if (Main.conexionSFTP(login.getText(), servidor.getText(), pass, origen.getText(), destino.getText())) {
                         Main.analizarLog(destino.getText());
+                        buscarButton.setEnabled(true);
                     }
 
-                } catch (JSchException e1) {
-                    e1.printStackTrace();
-                } catch (SftpException e1) {
-                    e1.printStackTrace();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
