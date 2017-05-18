@@ -3,8 +3,12 @@ package com.company;
 import com.jcraft.jsch.*;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.*;
+
+import static com.company.Main.conexionSFTP;
 
 
 public class Main {
@@ -161,5 +165,41 @@ public class Main {
             return this.getPeticion() + "-" + this.getDuracion();
         }
 
+    }
+}
+
+class Ventana {
+    private JTextField servidor;
+    private JTextField login;
+    public JPanel view;
+    private JTextField destino;
+    private JButton buscarButton;
+    private JPasswordField password;
+    private JTextField origen;
+
+    public Ventana() {
+        buscarButton.addActionListener(new Buscar());
+    }
+
+    private class Buscar implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (servidor.getText().isEmpty() || login.getText().isEmpty() || destino.getText().isEmpty() || password.getPassword().length < 1) {
+                JOptionPane.showMessageDialog(null, "Todos los campos son requeridos");
+            } else {
+                try {
+                    buscarButton.setEnabled(false);
+                    String pass = new String(password.getPassword());
+                    if (conexionSFTP(login.getText(), servidor.getText(), pass, origen.getText(), destino.getText())) {
+                        Main.analizarLog(destino.getText());
+                        buscarButton.setEnabled(true);
+                    }
+
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+
+            }
+        }
     }
 }
