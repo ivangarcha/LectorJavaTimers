@@ -34,7 +34,6 @@ public class Ventana {
                     String pass = new String(password.getPassword());
                     if (Main.conexionSFTP(login.getText(), servidor.getText(), pass, origen.getText(), destino.getText())) {
                         Main.analizarLog(destino.getText());
-                        buscarButton.setEnabled(true);
                     }
 
                 } catch (IOException e1) {

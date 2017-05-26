@@ -3,12 +3,8 @@ package com.company;
 import com.jcraft.jsch.*;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.*;
-
-import static com.company.Main.conexionSFTP;
 
 
 public class Main {
@@ -33,7 +29,6 @@ public class Main {
             session.setConfig("StrictHostKeyChecking", "no");
             session.setPassword(password);
             session.connect();
-
             Channel channel = session.openChannel("sftp");
             channel.connect();
             ChannelSftp sftpChannel = (ChannelSftp) channel;
@@ -48,6 +43,7 @@ public class Main {
     }
 
     public static void analizarLog(String nombreFichero) throws IOException {
+        System.out.println("Iniciando analisis del fichero .......");
         String linea;
         String archivo = nombreFichero;
         String archivo_destino = "tiempos " + archivo;
