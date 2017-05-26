@@ -37,8 +37,9 @@ public class Ventana {
                     }
 
                 } catch (IOException e1) {
-                    e1.printStackTrace();
+                    e1.printStackTrace();buscarButton.setEnabled(true);
                 }
+                buscarButton.setEnabled(true);
 
             }
         }

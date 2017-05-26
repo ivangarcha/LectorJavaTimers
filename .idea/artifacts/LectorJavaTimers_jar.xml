@@ -3,9 +3,9 @@
     <output-path>$PROJECT_DIR$/out/artifacts/LectorJavaTimers_jar</output-path>
     <root id="archive" name="LectorJavaTimers.jar">
       <element id="module-output" name="LectorJavaTimers" />
-      <element id="extracted-dir" path="$USER_HOME$/Downloads/json-simple-1.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$USER_HOME$/Downloads/jsch-0.1.54.jar" path-in-jar="/" />
-      <element id="file-copy" path="$USER_HOME$/Downloads/json-simple-1.1.jar" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
     </root>
   </artifact>
 </component>
