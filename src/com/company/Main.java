@@ -1,6 +1,10 @@
 package com.company;
 
-import com.jcraft.jsch.*;
+import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
+
 import javax.swing.*;
 import java.io.*;
 import java.util.*;
@@ -9,7 +13,7 @@ import java.util.*;
 public class Main {
 
 
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
         JFrame ventana = new JFrame("Analisis de Logs");
         ventana.setContentPane(new Ventana().view);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -109,7 +113,6 @@ public class Main {
                 bw.close();
                 b.close();
                 System.out.println("Finalizado analisis del fichero.");
-                Ventana.cerrar();
 
             } catch (NoSuchElementException e) {
 
