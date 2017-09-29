@@ -12,7 +12,6 @@ import java.util.*;
 
 public class Main {
 
-
     public static void main(String[] args) throws IOException {
         JFrame ventana = new JFrame("Analisis de Logs");
         ventana.setContentPane(new Ventana().view);
@@ -23,7 +22,7 @@ public class Main {
 
     }
 
-    public static boolean conexionSFTP(String login, String maquina, String password, String ficheroOrigen, String ficheroDestino) {
+    public static boolean conexionSFTP(String login, String maquina, String password, String ficheroOrigen, String directorioDestino) {
         JSch jsch = new JSch();
         Session session = null;
 
@@ -35,7 +34,9 @@ public class Main {
             Channel channel = session.openChannel("sftp");
             channel.connect();
             ChannelSftp sftpChannel = (ChannelSftp) channel;
-            sftpChannel.get(ficheroOrigen, ficheroDestino);
+            File directorio = new File(directorioDestino);
+            directorio.mkdir();
+            sftpChannel.get(ficheroOrigen, directorio + "\\backend.log." + maquina.substring(8));
             sftpChannel.exit();
             session.disconnect();
             return true;
@@ -45,18 +46,18 @@ public class Main {
         }
     }
 
-    public static void analizarLog(String nombreFichero) throws IOException {
+    public static void analizarLog(String nombreDirectorio, String maquina) throws IOException {
         System.out.println("Iniciando analisis del fichero .......");
         String linea;
-        String archivo = nombreFichero;
-        String archivo_destino = "tiempos " + archivo;
-        File fichero = new File(archivo_destino);
+        String directorio = nombreDirectorio;
+        String archivo_destino = "tiempos " + "backend.log." + maquina.substring(8);
+        File fichero = new File(directorio + "\\" + archivo_destino);
         BufferedWriter bw;
         bw = new BufferedWriter(new FileWriter(fichero));
         int contador = 1;
         ArrayList<Tiempo> lineas = new ArrayList<>();
         try {
-            FileReader fileReader = new FileReader(archivo);
+            FileReader fileReader = new FileReader(directorio + "\\" + "backend.log." + maquina.substring(8));
             BufferedReader b = new BufferedReader(fileReader);
             while ((linea = b.readLine()) != null) {
                 int inicio = 0;
@@ -107,7 +108,8 @@ public class Main {
             int posicion = 1;
             try {
                 while (itrArrayList.hasNext()) {
-                    bw.write(itrArrayList.next().getPeticion().toString() + " Duracion: " + String.valueOf(itrArrayList.next().getDuracion()) + " ms\n");
+                    Tiempo siguiente = itrArrayList.next();
+                    bw.write(siguiente.getPeticion().toString() + " Duracion: " + String.valueOf(siguiente.getDuracion()) + " ms\n");
                     posicion++;
                 }
                 bw.close();

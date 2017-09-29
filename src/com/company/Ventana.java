@@ -33,7 +33,7 @@ public class Ventana {
                     buscarButton.setEnabled(false);
                     String pass = new String(password.getPassword());
                     if (Main.conexionSFTP(login.getText(), servidor.getText(), pass, origen.getText(), destino.getText())) {
-                        Main.analizarLog(destino.getText());
+                        Main.analizarLog(destino.getText(), servidor.getText());
                     }
 
                 } catch (IOException e1) {
