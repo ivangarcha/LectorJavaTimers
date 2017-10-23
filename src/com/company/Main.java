@@ -23,10 +23,10 @@ public class Main {
     }
 
     public static boolean conexionSFTP(String login, String maquina, String password, String ficheroOrigen, String directorioDestino) {
-        JSch jsch = new JSch();
-        Session session = null;
-
         try {
+            JSch jsch = new JSch();
+            Session session = null;
+
             session = jsch.getSession(login, maquina, 22);
             session.setConfig("StrictHostKeyChecking", "no");
             session.setPassword(password);
